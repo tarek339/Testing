@@ -29,7 +29,9 @@ describe("Counter", () => {
     // getByText is the nethod to get the element by its text content
     const incButton = screen.getByText("increment");
     // userEvent is a library that simulates user events
+    // await for the user event to be completed
     await userEvent.click(incButton);
+    // then check if the element is in the document
     const element = screen.getByText("Count: 1");
     // toBeInTheDocument is a matcher that checks if the element is in the document
     expect(element).toBeInTheDocument();
