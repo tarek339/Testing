@@ -1,33 +1,48 @@
-import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
-import { cleanup, render, screen } from "@testing-library/react";
-import "@testing-library/jest-dom/vitest";
-import UserProfile from "./UserProfile";
+import { describe, it, expect, vi } from "vitest";
+import { fetchUser } from "../../lib/fetchUser";
 
-// Correct Placement of vi.mock
-// Simulated or controlled version of the fetchUser function instead of the real function
-// Mock control its output and focus solely on the logic of the tested unit
-// Controlling External Dependencies
-// Simulating different scenarios and outcomes from external services or modules
-// For predictable and robust tests
-// Speeding Up Tests by avoiding network requests or database interactions
-// Testing Edge Cases and Errors by controlling the return values of mocked dependencies
-// Provide the path to the module/function in the string argument
-vi.mock("../../lib/fetchUser", () => ({
-  // Factory function to create a mock of the fetchUser function
-  // vi.fn keep track of how they were called: how many times, with what arguments, and what they returned
-  fetchUser: vi.fn(() => Promise.resolve({})), // Mock implementation of fetchUser
-}));
+describe("fetchUser", () => {
+  it("should successfully retrieve and return user data", async () => {
+    // Define mock user data
+    const mockUserData = {
+      id: 3,
+      name: "Clementine Bauch",
+      username: "Samantha",
+      email: "Nathan@yesenia.net",
+      address: {
+        street: "Douglas Extension",
+        suite: "Suite 847",
+        city: "McKenziehaven",
+        zipcode: "59590-4157",
+        geo: {
+          lat: "-68.6102",
+          lng: "-47.0653",
+        },
+      },
+      phone: "1-463-123-4447",
+      website: "ramiro.info",
+      company: {
+        name: "Romaguera-Crona",
+        catchPhrase: "Multi-layered client-server neural-net",
+        bs: "harness real-time e-markets",
+      },
+    };
 
-describe("UserProfile", () => {
-  beforeEach(() => {
-    render(<UserProfile />);
-  });
-  afterEach(() => {
-    cleanup();
-  });
+    // Mocke the fetch function globally
+    globalThis.fetch = vi.fn().mockResolvedValue({
+      ok: true,
+      json: async () => mockUserData,
+    });
 
-  it("default user id value", () => {
-    const el = screen.getByText("User ID:");
-    expect(el).toBeInTheDocument();
+    // Call the fetchUser function
+    const userData = await fetchUser();
+
+    // Check if the fetch function was called with the correct URL
+    expect(globalThis.fetch).toHaveBeenCalledWith(
+      "https://jsonplaceholder.typicode.com/users/3"
+    );
+
+    // Check if the fetch function was called only once
+    expect(userData).toEqual(mockUserData);
   });
 });
