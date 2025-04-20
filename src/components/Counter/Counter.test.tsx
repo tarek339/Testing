@@ -4,9 +4,6 @@ import "@testing-library/jest-dom/vitest";
 import userEvent from "@testing-library/user-event";
 import Counter from "./Counter";
 
-// user profile user id as a prop
-// json place holder api
-
 // describe is a function that groups related tests
 describe("Counter", () => {
   // before all tests

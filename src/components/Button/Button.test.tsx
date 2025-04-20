@@ -9,6 +9,8 @@ const sum = (a: number, b: number) => {
 
 describe("all components", () => {
   it("testing something", () => {
+    // expect is a function that takes a value and returns an object with methods for making assertions
+    // toBe is a matcher that checks if the value is equal to the expected value
     expect(sum(2, 5)).toBe(7);
   });
 
